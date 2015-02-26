@@ -27,7 +27,7 @@ sudo rpm -iUvh http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-5.
 sudo yum -y update
 sudo yum -y install python-pip
 sudo yum -y install python-virtualenv
-sudo yum -y install portaudio
+sudo yum -y install portaudio portaudio-devel
 ```
 
 ### Mac OSX
