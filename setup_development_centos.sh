@@ -54,7 +54,7 @@ fi
 python -c"import pyaudio"
 if [ $? != 0 ]; then
     echo "pyaudio not available adding"
-    pip install -U --force --allow-external pyaudio pyaudio
+    pip install -U --force http://people.csail.mit.edu/hubert/pyaudio/packages/pyaudio-0.2.8.tar.gz
     if [ $? != 0 ]; then
         echo "FAILURE: pyaudio failed installing"
         WILL_FAIL=2
