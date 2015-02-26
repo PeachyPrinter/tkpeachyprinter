@@ -54,7 +54,7 @@ fi
 python -c"import pyaudio"
 if [ $? != 0 ]; then
     echo "pyaudio not available adding"
-    pip install -U --force --allow-external pyaudio
+    pip install -U --force --allow-external pyaudio pyaudio
     if [ $? != 0 ]; then
         echo "FAILURE: pyaudio failed installing"
         WILL_FAIL=2
