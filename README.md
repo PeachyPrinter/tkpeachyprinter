@@ -9,20 +9,36 @@ via apt
  - python-virtualenv
  - cx-freeze
 
-via pip
- - numpy
- - mock
-
 You can prepare your enviroment using the following command:
 ```sh
-$ sudo apt-get install python-pip python-pyaudio cx-freeze python-virtualenv
+sudo apt-get install python-pip python-pyaudio cx-freeze python-virtualenv
 ```
 
 ### Centos (RedHat)
+via yum
+ - python-pip
+ - python-pyaudio
+ - python-virtualenv
+ - cx-freeze
+
+ You can prepare your enviroment using the following command:
+```sh
+sudo rpm -iUvh http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-5.noarch.rpm
+sudo yum -y update
+sudo yum -y install python-pip
+sudo yum -y install python-virtualenv
+```
 
 ### Mac OSX
+ - pip
+ - virtualenv
+
 
 ### Windows
+via (oh yeah there is no package manager in windows)
+ - python [https://www.python.org/downloads/windows/]
+ - pyaudio [http://people.csail.mit.edu/hubert/pyaudio/#downloads]
+
 
 ##Getting Started
 ###Creating a development enviroment
