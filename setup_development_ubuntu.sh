@@ -1,6 +1,8 @@
 #!/bin/bash
 if [[ "$VIRTUAL_ENV" != "" ]]; then
-    deactivate
+    echo "Deactivitate the existing virtual enviroment before running this script."
+    echo "This can be done with the \"deactivate\" command."
+    exit 53 
 fi
 
 if [ -d "venv" ]; then
@@ -26,6 +28,7 @@ fi
 SETUP_TMP="setup_tmp"
 WILL_FAIL=0
 FAIL_REASONS=""
+
 python -c"import numpy"
 if [ $? != 0 ]; then
     echo "Numpy not available adding"
@@ -37,23 +40,33 @@ if [ $? != 0 ]; then
     fi
 fi
 
-# python -c"import cx_freeze"
-# if [ $? != 0 ]; then
-#     echo "cx_freeze not available adding"
-#     pip install -U --force cx_freeze
-#     if [ $? != 0 ]; then
-#         echo "FAILURE: cx_freeze failed installing"
-#         WILL_FAIL=2
-#         FAIL_REASONS="$FAIL_REASONS\nFAILURE: cx_freeze failed installing"
-#     fi
-# fi
+dpkg --get-selections | grep -v deinstall | grep python-pyaudio 2>&1 >/dev/null
+if [ $? != 0 ]; then
+    echo "cx-freeze Required"
+    echo "You should be prompted to install via apt-get now"
+    sudo apt-get install cx-freeze
+    if [ $? != 0 ]; then
+        echo "FAILURE: cx-freeze failed installing"
+        WILL_FAIL=2
+        FAIL_REASONS="$FAIL_REASONS\nFAILURE: cx-freeze failed installing (APT)"
+    fi
+fi
 
-dpkg --get-selections | grep -v deinstall | grep python-pyaudio
+ln -s /usr/lib/pymodules/python2.7/cx_Freeze venv/lib/python2.7/site-packages/cx_Freeze
+ln -s /usr/lib/pymodules/python2.7/cx_Freeze-4.3.1.egg-info venv/lib/python2.7/site-packages/cx_Freeze-4.3.1.egg-info
+python -c"import cx_Freeze"
+if [ $? != 0 ]; then
+        WILL_FAIL=3
+        FAIL_REASONS="$FAIL_REASONS\nFAILURE: cx_Freeze failed installing (LINK)"
+fi
+
+dpkg --get-selections | grep -v deinstall | grep python-pyaudio 2>&1 >/dev/null
 if [ $? != 0 ]; then
     echo "PyAudio Required"
+    echo "You should be prompted to install via apt-get now"
     sudo apt-get install python-pyaudio
     if [ $? != 0 ]; then
-        WILL_FAIL=3
+        WILL_FAIL=4
         FAIL_REASONS="$FAIL_REASONS\nFAILURE: pyaudio failed installing (APT)"
     fi
 fi
@@ -63,10 +76,9 @@ ln -fs /usr/lib/python2.7/dist-packages/_portaudio.so venv/lib/python2.7/site-pa
 ln -fs /usr/lib/python2.7/dist-packages/PyAudio-0.2.8.egg-info venv/lib/python2.7/site-packages/PyAudio-0.2.8.egg-info
 python -c"import pyaudio"
 if [ $? != 0 ]; then
-        WILL_FAIL=3
+        WILL_FAIL=5
         FAIL_REASONS="$FAIL_REASONS\nFAILURE: pyaudio failed installing (LINK)"
 fi
-
 
 if [ $WILL_FAIL != 0 ]; then
     echo "Enviroment setup failed"
@@ -74,3 +86,5 @@ if [ $WILL_FAIL != 0 ]; then
 fi
 exit $WILL_FAIL
 
+echo "Enviroment setup complete and seemingly successful."
+echo "You can start the enviroment with the command\"source venv/bin/activate\""
