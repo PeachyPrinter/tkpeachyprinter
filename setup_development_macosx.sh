@@ -5,17 +5,24 @@ if [[ "$VIRTUAL_ENV" != "" ]]; then
     exit 53 
 fi
 
+INSTALL_VENV="TRUE"
 if [ -d "venv" ]; then
     while true; do
     read -p "Do you wish remove and re-install this environment?" yn
     case $yn in
-        [Yy]* ) rm -rf venv && virtualenv venv; break;;
-        [Nn]* ) break;;
+        [Yy]* ) rm -rf venv && INSTALL_VENV="TRUE"; break;;
+        [Nn]* ) INSTALL_VENV="FALSE"; break;;
         * ) echo "Please answer yes or no.";;
     esac
     done
-else
+fi
+
+if [ $INSTALL_VENV != "TRUE" ]; then
     virtualenv venv
+    if [ $? != 0 ]; then
+        echo "Virutal environment not installed"
+        exit 59
+    fi
 fi
 
 source venv/bin/activate
