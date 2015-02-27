@@ -20,7 +20,7 @@ class PrintUI(PeachyFrame):
         self.folder_opt['parent'] = self
         self.folder_opt['title'] = 'Select file to print'
 
-        self._configuration_api = ConfigurationAPI(self._configuration_manager)
+        self._configuration_api = self._api.get_configuration_api()
         self._printer_selection_current = StringVar()
 
         self._start_at_height_option = IntVar()
@@ -134,7 +134,7 @@ class VerifyStatusUI(PeachyFrame):
         else:
             start_height = 0.0
 
-        self._print_api = PrintAPI(self.kwargs['config'], start_height=start_height, status_call_back=self.status_call_back)
+        self._print_api = self._api.get_print_api(start_height=start_height, status_call_back=self.status_call_back)
         if 'filename' in self.kwargs:
             file_name = self.kwargs['filename']
             self._print_api.verify_gcode(file_name)
@@ -352,15 +352,15 @@ class PrintStatusUI(PeachyFrame):
         else:
             start_height = 0.0
         if 'filename' in self.kwargs:
-            self._print_api = PrintAPI(self.kwargs['config'], start_height=start_height, status_call_back=self.status_call_back)
+            self._print_api = self._api.get_print_api(start_height=start_height, status_call_back=self.status_call_back)
             file_name = self.kwargs['filename']
             self._print_api.print_gcode(file_name)
         elif 'foldername' in self.kwargs:
-            self._print_api = PrintQueueAPI(self.kwargs['config'], status_call_back=self.status_call_back)
+            self._print_api = self._api.get_print_queue_api(status_call_back=self.status_call_back)
             foldername = self.kwargs['foldername']
             self._print_api.print_folder(foldername)
         else:
-            self._print_api = PrintAPI(self.kwargs['config'], start_height=start_height, status_call_back=self.status_call_back)
+            self._print_api = self._api.get_print_api(start_height=start_height, status_call_back=self.status_call_back)
             self._print_api.print_layers(self.kwargs['layer_generator'])
 
         if self._print_api.can_set_drips_per_second():

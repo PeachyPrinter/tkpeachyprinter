@@ -3,8 +3,7 @@
 from Tkinter import *
 from ui.ui_tools import *
 from ui.main_ui import MainUI
-from api.print_api import PrintAPI
-from api.configuration_api import ConfigurationAPI
+
 
 class LicenceUI(PeachyFrame):
     licence = '''Copyright 2014 Peachy Printer INC.
@@ -27,13 +26,13 @@ limitations under the License.'''
         scrollbar = Scrollbar(self, orient=VERTICAL)
         scrollbar.grid(column=1, sticky=N+S)
 
-        text = Text(self, yscrollcommand=scrollbar.set, width =110, height=36, wrap =WORD)
+        text = Text(self, yscrollcommand=scrollbar.set, width=110, height=36, wrap=WORD)
         text.insert(INSERT, self.licence)
         text.grid(column=0, row=0, sticky=N+S+E+W)
 
         scrollbar.config(command=text.yview)
-        button = Button(self,text=u"Back", command=self._back)
-        button.grid(column=0,row=1, sticky=N+W)
+        button = Button(self, text=u"Back", command=self._back)
+        button.grid(column=0, row=1, sticky=N+W)
         self.columnconfigure(0, weight=1)
 
         self.update()
