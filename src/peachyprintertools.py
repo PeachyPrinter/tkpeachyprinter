@@ -2,13 +2,12 @@
 # -*- coding: iso-8859-1 -*-
 
 import logging
-import config
+from peachyprinter import config, PrinterAPI
 import argparse
 import os
 import sys
 import time
 from Tkinter import *
-from infrastructure.configuration import FileBasedConfigurationManager
 from ui.main_ui import MainUI
 
 
@@ -23,15 +22,14 @@ class PeachyPrinterTools(Tk):
             self.setup_icon()
 
         self.parent = parent
-        configuration_manager = FileBasedConfigurationManager()
-        self._configuration_manager = configuration_manager
+        self._api  = PrinterAPI()
 
         self.start_main_window()
 
         self.protocol("WM_DELETE_WINDOW", self.close)
 
     def start_main_window(self):
-        MainUI(self, self._configuration_manager)
+        MainUI(self, self._api)
 
     def setup_icon(self):
         img_file = os.path.join(self.path, 'resources', 'peachy.gif')

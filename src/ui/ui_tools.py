@@ -76,17 +76,17 @@ class PopUp():
 
 
 class PeachyFrame(Frame):
-    def __init__(self, parent, configuration_manager, **kwargs):
+    def __init__(self, parent, api, **kwargs):
         logging.info("Peachy Frame kwargs: %s" % kwargs)
         Frame.__init__(self, parent)
         self.config(padx = 5, pady =5)
         self.parent = parent
         self.kwargs = kwargs
         self.parent.protocol("WM_DELETE_WINDOW", self.quit)
-        self._configuration_manager = configuration_manager
+        self._api = api
         try:
             self.initialize()
-        except Exception as ex:
+        except NO as ex:    #TODO FIX THIS
             logging.error(ex)
             tkMessageBox.showwarning( "Error",ex)
             raise ex
@@ -94,7 +94,7 @@ class PeachyFrame(Frame):
     def navigate(self, next_frame , **kwargs):
         self.close()
         self.destroy()
-        self.parent.current_frame = next_frame(self.parent, self._configuration_manager, **kwargs) 
+        self.parent.current_frame = next_frame(self.parent, self._api, **kwargs) 
 
     def close(self):
         pass

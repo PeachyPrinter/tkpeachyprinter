@@ -2,9 +2,7 @@ from Tkinter import *
 import tkFileDialog
 from ui.ui_tools import *
 from ui.main_ui import MainUI
-from api.print_api import PrintAPI, PrintQueueAPI
-from api.configuration_api import ConfigurationAPI
-from config import devmode
+from peachyprinter.config import devmode
 
 
 class PrintUI(PeachyFrame):

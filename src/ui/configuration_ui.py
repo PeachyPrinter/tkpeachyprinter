@@ -1,28 +1,22 @@
 from Tkinter import *
 import tkMessageBox
-from ui.ui_tools import *
-from ui.main_ui import MainUI
-from ui.calibration_ui import *
-from api.configuration_api import ConfigurationAPI
+from ui_tools import *
+from main_ui import MainUI
+from calibration_ui import *
 from print_ui import PrintStatusUI
-from infrastructure.print_test_layer_generators import HalfVaseTestGenerator
-from api.test_print_api import TestPrintAPI
 import help_text
 import traceback
-
-
-from config import devmode
+from peachyprinter.config import devmode
 
 class SetupUI(PeachyFrame):
 
     def initialize(self):
-        self._configuration_api = ConfigurationAPI(self._configuration_manager)
         self.grid()
         printer_selection_current = StringVar()
         
-        if not self._configuration_api.get_available_printers():
-            self._configuration_api.add_printer("Peachy Printer")
-        available_printers = self._configuration_api.get_available_printers() 
+        if not self._api.get_available_printers():
+            self._api.add_printer("Peachy Printer")
+        available_printers = self._api.get_available_printers()
 
         if 'printer' in self.kwargs.keys():
             printer = self.kwargs['printer']
@@ -52,7 +46,7 @@ class SetupUI(PeachyFrame):
         self.update()
 
     def _printer_selected(self, selection):
-        self._configuration_api.load_printer(selection)
+        self._api.load_printer(selection)
         self._current_printer = selection
 
     def _add_printer(self):
@@ -86,7 +80,6 @@ class SetupUI(PeachyFrame):
 class AddPrinterUI(PeachyFrame):
     def initialize(self):
         self.grid()
-        self._configuration_api = ConfigurationAPI(self._configuration_manager)
         
         self._printer_name = StringVar()
 
@@ -101,7 +94,7 @@ class AddPrinterUI(PeachyFrame):
 
     def _save(self):
         printer_name = self._printer_name.get()
-        self._configuration_api.add_printer(printer_name)
+        self._api.add_printer(printer_name)
         self.navigate(SetupUI, printer = printer_name)
 
     def close(self):
@@ -112,7 +105,7 @@ class SetupOptionsUI(PeachyFrame):
     def initialize(self):
         self.grid()
         self._current_printer = self.kwargs['printer']
-        self._configuration_api = ConfigurationAPI(self._configuration_manager)
+        self._configuration_api = self._api.get_configuration_api()
         self._configuration_api.load_printer(self._current_printer)
         self.option_add('*Dialog.msg.width', 50)
 
@@ -376,7 +369,7 @@ class DripCalibrationUI(PeachyFrame, FieldValidations):
     
     def initialize(self):
         self._current_printer = self.kwargs['printer']
-        self._configuration_api = ConfigurationAPI(self._configuration_manager)
+        self._configuration_api = self._api.get_configuration_api()
         self._configuration_api.load_printer(self._current_printer)
         self.grid()
 
@@ -543,39 +536,35 @@ class DripCalibrationUI(PeachyFrame, FieldValidations):
 class SetupCircutUI(PeachyFrame):
 
     def initialize(self):
-        try:
-            self.grid()
-            self._current_printer = self.kwargs['printer']
-            self._configuration_api = ConfigurationAPI(self._configuration_manager)
-            self._configuration_api.load_printer(self._current_printer)
+        self.grid()
+        self._current_printer = self.kwargs['printer']
+        self._configuration_api = self._api.get_configuration_api()
+        self._configuration_api.load_printer(self._current_printer)
 
-            Label(self, text='Printer: ').grid(column=0, row=10)
-            Label(self, text=self._configuration_api.current_printer()).grid(column=1, row=10)
-            Button(self, text='?', command=self._help).grid(column=2, row=10, stick=N+E)
+        Label(self, text='Printer: ').grid(column=0, row=10)
+        Label(self, text=self._configuration_api.current_printer()).grid(column=1, row=10)
+        Button(self, text='?', command=self._help).grid(column=2, row=10, stick=N+E)
 
-            audio_options = self._configuration_api.get_available_audio_options()
-            self._digital_frame = LabelFrame(self, text="Digital Circut", padx=5, pady=5)
-            self._analog_frame = LabelFrame(self, text="Analog Circut", padx=5, pady=5)
-            self._circut_type = StringVar()
+        audio_options = self._configuration_api.get_available_audio_options()
+        self._digital_frame = LabelFrame(self, text="Digital Circut", padx=5, pady=5)
+        self._analog_frame = LabelFrame(self, text="Analog Circut", padx=5, pady=5)
+        self._circut_type = StringVar()
 
-            if (len(audio_options['inputs']) > 0 and len(audio_options['outputs']) > 0):
-                self._audio_available = True
-                self.initialize_audio(audio_options)
-                Radiobutton(self, text="Analog Circut", variable=self._circut_type, value="Analog", command=self._circut_type_changed).grid(column=0, row=20, sticky=N+S+E+W)
-            else:
-                self._audio_available = False
+        if (len(audio_options['inputs']) > 0 and len(audio_options['outputs']) > 0):
+            self._audio_available = True
+            self.initialize_audio(audio_options)
+            Radiobutton(self, text="Analog Circut", variable=self._circut_type, value="Analog", command=self._circut_type_changed).grid(column=0, row=20, sticky=N+S+E+W)
+        else:
+            self._audio_available = False
 
-            self.initialize_micro()
-            Radiobutton(self, text="Microcontroller ", variable=self._circut_type, value="Digital", command=self._circut_type_changed).grid(column=1, row=20, sticky=N+S+E+W)
+        self.initialize_micro()
+        Radiobutton(self, text="Microcontroller ", variable=self._circut_type, value="Digital", command=self._circut_type_changed).grid(column=1, row=20, sticky=N+S+E+W)
 
-            Label(self).grid(column=0, row=50)
-            Button(self, text="Back", command=self._back).grid(column=0, row=60, sticky=N+S+W)
-            Button(self, text="Save", command=self._save).grid(column=1, row=60, sticky=N+S+E)
-            self._circut_type_changed()
-            self.update()
-        except Exception as ex:
-            traceback.print_exc()
-            raise(ex)
+        Label(self).grid(column=0, row=50)
+        Button(self, text="Back", command=self._back).grid(column=0, row=60, sticky=N+S+W)
+        Button(self, text="Save", command=self._save).grid(column=1, row=60, sticky=N+S+E)
+        self._circut_type_changed()
+        self.update()
 
     def initialize_micro(self):
         self._port = StringVar()
@@ -692,7 +681,7 @@ class CureTestUI(PeachyFrame):
     def initialize(self):
         self.grid()
         self._current_printer = self.kwargs['printer']
-        self._configuration_api = ConfigurationAPI(self._configuration_manager)
+        self._configuration_api = self._api.get_configuration_api()
         self._configuration_api.load_printer(self._current_printer)
 
         self._base_height = DoubleVar()
@@ -812,9 +801,9 @@ class TestPrintUI(PeachyFrame):
     def initialize(self):
         self.grid()
         self._current_printer = self.kwargs['printer']
-        self._configuration_api = ConfigurationAPI(self._configuration_manager)
+        self._configuration_api = self._api.get_configuration_api()
         self._configuration_api.load_printer(self._current_printer)
-        self._test_print_api = TestPrintAPI()
+        self._test_print_api = self._api.get_test_print_api()
         self._selected_print = StringVar()
         self._selected_print.set(self._test_print_api.test_print_names()[0])
 

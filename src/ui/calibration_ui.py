@@ -2,13 +2,11 @@ from Tkinter import *
 import tkMessageBox
 from ui.ui_tools import *
 from ui.main_ui import MainUI
-from api.calibration_api import CalibrationAPI
-import numpy as np
 import help_text
-from config import devmode
+from peachyprinter.config import devmode
 
 class CalibrationPoint(object):
-    def __init__(self,ref_x,ref_y,ref_z,actual_x,actual_y,actual_z):
+    def __init__(self, ref_x, ref_y, ref_z, actual_x, actual_y, actual_z):
         self.ref_x = DoubleVar()
         self.ref_x.set(ref_x)
         self.ref_y = DoubleVar()
@@ -25,7 +23,7 @@ class CalibrationPoint(object):
 
     @property
     def ref_xyz_float(self):
-        return [float(self.ref_x.get()),float(self.ref_y.get()),float(self.ref_z.get())]
+        return [float(self.ref_x.get()), float(self.ref_y.get()),float(self.ref_z.get())]
 
     @property
     def actual_xyz_float(self):
