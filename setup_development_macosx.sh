@@ -1,34 +1,60 @@
 #!/bin/bash
+echo "----Checking for already running Virtual Evniroment----"
 if [[ "$VIRTUAL_ENV" != "" ]]; then
     echo "Deactivitate the existing virtual enviroment before running this script."
     echo "This can be done with the \"deactivate\" command."
     exit 53 
 fi
 
-INSTALL_VENV="TRUE"
+
+echo "----Checking for Pip----"
+command -v pip 2>&1 >/dev/null
+if [ $? != 0 ]; then
+    echo "Pip not available, you should be prompted for install:"
+    sudo easy_install pip
+    if [ $? != 0 ]; then
+        echo "FAILURE: Pip failed installing"
+        WILL_FAIL=11
+        FAIL_REASONS="$FAIL_REASONS\nFAILURE: Pip failed installing"
+    fi
+fi
+
+
+echo "----Checking for virtualenv----"
+command -v virtualenv 2>&1 >/dev/null
+if [ $? != 0 ]; then
+    echo "virtualenv not available, you should be prompted for install:"
+    sudo pip install virtualenv
+    if [ $? != 0 ]; then
+        echo "FAILURE: Pip failed installing"
+        WILL_FAIL=12
+        FAIL_REASONS="$FAIL_REASONS\nFAILURE: Pip failed installing"
+    fi
+fi
+
+echo "----Checking for and create a virtual environment----"
+CREATE_VENV="TRUE"
 if [ -d "venv" ]; then
     while true; do
     read -p "Do you wish remove and re-install this environment?" yn
     case $yn in
-        [Yy]* ) rm -rf venv && INSTALL_VENV="TRUE"; break;;
-        [Nn]* ) INSTALL_VENV="FALSE"; break;;
+        [Yy]* ) rm -rf venv && CREATE_VENV="TRUE"; break;;
+        [Nn]* ) CREATE_VENV="FALSE"; break;;
         * ) echo "Please answer yes or no.";;
     esac
     done
 fi
-
-if [ $INSTALL_VENV != "TRUE" ]; then
+if [ $CREATE_VENV == "TRUE" ]; then
     virtualenv venv
     if [ $? != 0 ]; then
-        echo "Virutal environment not installed"
+        echo "Virutal environment failed"
         exit 59
     fi
 fi
 
 source venv/bin/activate
-
 if [[ "$VIRTUAL_ENV" == "" ]]; then
-    echo "Virutal environment setup failed"
+    echo "Virutal environment creation failed"
     exit 666
 fi
 
