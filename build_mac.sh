@@ -9,7 +9,7 @@ rm -rf src/build
 rm -rf *.dmg
 rm -f src/VERSION.py
 rm -f version.properties 
-rf -rf venv
+rm -rf venv
 
 echo "------------------------------------"
 echo "Setting up Enviroment"
