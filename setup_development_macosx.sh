@@ -60,6 +60,8 @@ echo "----Setting up virtual environment----"
 SETUP_TMP="setup_tmp"
 WILL_FAIL=0
 FAIL_REASONS=""
+export CFLAGS=-Qunused-arguments
+export CPPFLAGS=-Qunused-arguments
 
 echo "--------Setting up numpy----"
 python -c"import numpy"
@@ -96,7 +98,8 @@ if [ $? != 0 ]; then
 fi
 
 if [ $WILL_FAIL != 0 ]; then
-    echo "Enviroment setup failed"
+    echo "-----------------------------------"
+    echo "Enviroment setup failed. Summery:"
     echo -e $FAIL_REASONS
 fi
 exit $WILL_FAIL
