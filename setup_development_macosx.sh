@@ -1,11 +1,10 @@
 #!/bin/bash
-echo "----Checking for already running Virtual Evniroment----"
+echo "----Checking for already running Virtual Environment----"
 if [[ "$VIRTUAL_ENV" != "" ]]; then
     echo "Deactivitate the existing virtual enviroment before running this script."
     echo "This can be done with the \"deactivate\" command."
     exit 53 
 fi
-
 
 echo "----Checking for Pip----"
 command -v pip 2>&1 >/dev/null
@@ -51,17 +50,18 @@ if [ $CREATE_VENV == "TRUE" ]; then
         exit 59
     fi
 fi
-
 source venv/bin/activate
 if [[ "$VIRTUAL_ENV" == "" ]]; then
     echo "Virutal environment creation failed"
     exit 666
 fi
 
+echo "----Setting up virtual environment----"
 SETUP_TMP="setup_tmp"
 WILL_FAIL=0
 FAIL_REASONS=""
 
+echo "--------Setting up numpy----"
 python -c"import numpy"
 if [ $? != 0 ]; then
     echo "Numpy not available adding"
@@ -72,7 +72,7 @@ if [ $? != 0 ]; then
         FAIL_REASONS="$FAIL_REASONS\nFAILURE: Numpy failed installing"
     fi
 fi
-
+echo "--------Setting up cx_Freeze----"
 python -c"import cx_Freeze"
 if [ $? != 0 ]; then
     echo "cx_Freeze not available adding"
@@ -83,7 +83,7 @@ if [ $? != 0 ]; then
         FAIL_REASONS="$FAIL_REASONS\nFAILURE: cx_Freeze failed installing"
     fi
 fi
-
+echo "--------Setting up pyaudio----"
 python -c"import pyaudio"
 if [ $? != 0 ]; then
     echo "pyaudio not available adding"
@@ -91,14 +91,13 @@ if [ $? != 0 ]; then
     if [ $? != 0 ]; then
         echo "FAILURE: pyaudio failed installing"
         WILL_FAIL=2
-        FAIL_REASONS="$FAIL_REASONS\nFAILURE: cx_Freeze failed installing"
+        FAIL_REASONS="$FAIL_REASONS\nFAILURE: Pyaudio failed installing"
     fi
 fi
 
-
 if [ $WILL_FAIL != 0 ]; then
     echo "Enviroment setup failed"
-    echo $FAIL_REASONS
+    echo -e $FAIL_REASONS
 fi
 exit $WILL_FAIL
 
