@@ -92,6 +92,9 @@ if [ $? != 0 ]; then
     pip install -U --force --allow-external pyaudio --allow-unverified pyaudio pyaudio
     if [ $? != 0 ]; then
         echo "FAILURE: pyaudio failed installing"
+        echo "FAILURE: Chances are you are missing the port audio binding."
+        echo "FAILURE: If you have Homebrew installed 'brew install portaudio' should solve this problem"
+        echo "FAILURE: Or if you prefer pain you can build from source, http://portaudio.com/docs/v19-doxydocs/tutorial_start.html"
         WILL_FAIL=2
         FAIL_REASONS="$FAIL_REASONS\nFAILURE: Pyaudio failed installing"
     fi
