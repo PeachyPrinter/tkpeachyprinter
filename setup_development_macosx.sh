@@ -102,12 +102,21 @@ if [ $? != 0 ]; then
     fi
 fi
 
+echo "--------Getting Latest API----"
+./get_latest_api.sh
+if [ $? != 0 ]; then
+    echo "FAILURE: Failed Fetching Latest API"
+    WILL_FAIL=2
+    FAIL_REASONS="$FAIL_REASONS\nFAILURE: Failed Fetching Latest API"
+fi
+
 if [ $WILL_FAIL != 0 ]; then
     echo "-----------------------------------"
     echo "Enviroment setup failed. Summery:"
     echo -e $FAIL_REASONS
     exit $WILL_FAIL
 fi
+
 echo ""
 echo "-----------------------------------"
 echo "Enviroment setup complete and seemingly successful."

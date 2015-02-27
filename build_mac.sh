@@ -9,6 +9,13 @@ rm -rf src/build
 rm -rf *.dmg
 rm -f src/VERSION.py
 rm -f version.properties 
+rf -rf venv
+
+echo "------------------------------------"
+echo "Setting up Enviroment"
+echo "------------------------------------"
+
+source setup_development_macosx.sh
 
 echo "------------------------------------"
 echo "Extracting Git Revision Number"
@@ -42,6 +49,10 @@ echo "version='$VERSION'" >> version.properties
 echo "revision='$GIT_REV'" >> version.properties
 echo "Git Revision Number is $GIT_REV_COUNT"
 cp version.properties src/VERSION.py
+
+echo "------------------------------------"
+echo "Building Package"
+echo "------------------------------------"
 
 cd src
 python setup.py bdist_dmg

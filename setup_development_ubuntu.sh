@@ -116,6 +116,14 @@ if [ $? != 0 ]; then
         FAIL_REASONS="$FAIL_REASONS\nFAILURE: pyaudio failed installing (LINK)"
 fi
 
+echo "--------Getting Latest API----"
+./get_latest_api.sh
+if [ $? != 0 ]; then
+    echo "FAILURE: Failed Fetching Latest API"
+    WILL_FAIL=2
+    FAIL_REASONS="$FAIL_REASONS\nFAILURE: Failed Fetching Latest API"
+fi
+
 if [ $WILL_FAIL != 0 ]; then
     echo "Enviroment setup failed"
     echo -e $FAIL_REASONS
