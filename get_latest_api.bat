@@ -1,0 +1,1 @@
+pip install --upgrade http://software.peachyprinter.com/builds/api/latest.zip
