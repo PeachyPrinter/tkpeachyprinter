@@ -1,6 +1,6 @@
 try:
     import numpy
-    import cx_freeze
+    import cx_Freeze
     import pyaudio
 except Exception as ex:
     print(ex)
