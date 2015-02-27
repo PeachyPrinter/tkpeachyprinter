@@ -25,9 +25,9 @@ if [ $? != 0 ]; then
     echo "virtualenv not available, you should be prompted for install:"
     sudo pip install virtualenv
     if [ $? != 0 ]; then
-        echo "FAILURE: Pip failed installing"
+        echo "FAILURE: virtualenv failed installing"
         WILL_FAIL=12
-        FAIL_REASONS="$FAIL_REASONS\nFAILURE: Pip failed installing"
+        FAIL_REASONS="$FAIL_REASONS\nFAILURE: virtualenv failed installing"
     fi
 fi
 
@@ -52,7 +52,7 @@ if [ $CREATE_VENV == "TRUE" ]; then
 fi
 source venv/bin/activate
 if [[ "$VIRTUAL_ENV" == "" ]]; then
-    echo "Virutal environment creation failed"
+    echo "FAILURE: Virutal environment creation failed"
     exit 666
 fi
 
@@ -64,7 +64,7 @@ export CFLAGS=-Qunused-arguments
 export CPPFLAGS=-Qunused-arguments
 
 echo "--------Setting up numpy----"
-python -c"import numpy"
+python -c"import numpy" 2>&1 >/dev/null
 if [ $? != 0 ]; then
     echo "Numpy not available adding"
     pip install -U --force numpy
@@ -74,8 +74,9 @@ if [ $? != 0 ]; then
         FAIL_REASONS="$FAIL_REASONS\nFAILURE: Numpy failed installing"
     fi
 fi
+
 echo "--------Setting up cx_Freeze----"
-python -c"import cx_Freeze"
+python -c"import cx_Freeze" 2>&1 >/dev/null
 if [ $? != 0 ]; then
     echo "cx_Freeze not available adding"
     pip install -U --force cx_Freeze
@@ -85,8 +86,9 @@ if [ $? != 0 ]; then
         FAIL_REASONS="$FAIL_REASONS\nFAILURE: cx_Freeze failed installing"
     fi
 fi
+
 echo "--------Setting up pyaudio----"
-python -c"import pyaudio"
+python -c"import pyaudio" 2>&1 >/dev/null
 if [ $? != 0 ]; then
     echo "pyaudio not available adding"
     pip install -U --force --allow-external pyaudio --allow-unverified pyaudio pyaudio
@@ -104,8 +106,9 @@ if [ $WILL_FAIL != 0 ]; then
     echo "-----------------------------------"
     echo "Enviroment setup failed. Summery:"
     echo -e $FAIL_REASONS
+    exit $WILL_FAIL
 fi
-exit $WILL_FAIL
-
+echo ""
+echo "-----------------------------------"
 echo "Enviroment setup complete and seemingly successful."
 echo "You can start the enviroment with the command\"source venv/bin/activate\""
