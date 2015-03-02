@@ -1,56 +1,56 @@
-@echo off
+@ECHO OFF
 
-echo ------------------------------------
-echo Cleaning workspace
-echo ------------------------------------
+ECHO ------------------------------------
+ECHO Cleaning workspace
+ECHO ------------------------------------
 
-del /Q *.msi
-rmdir /S /Q src\build
-rmdir /S /Q src\dist
-REM TODO JT 2014-02-04 - Should clean the workspace
+DEL /Q *.msi
+RMDIR /S /Q src\build
+RMDIR /S /Q src\dist
+DEL /S *.pyc
 
-echo ------------------------------------
-echo Extracting Git Revision Number
-echo ------------------------------------
+ECHO ------------------------------------
+ECHO Extracting Git Revision Number
+ECHO ------------------------------------
 
-set SEMANTIC=0.0.1
-set /p SEMANTIC=<symantic.version
+SET SEMANTIC=0.0.1
+SET /p SEMANTIC=<symantic.version
 IF NOT DEFINED GIT_HOME (
   git --version
   IF "%ERRORLEVEL%" == "0" (
-    set GIT_HOME=git
+    SET GIT_HOME=git
   ) ELSE (
-    echo "Could not find git."
-    pause
+    ECHO "Could not find git."
+    PAUSE
     EXIT /B 1
   )
 )
 
-for /f "delims=" %%A in ('%GIT_HOME% rev-list HEAD --count') do set "GIT_REV_COUNT=%%A"
-for /f "delims=" %%A in ('%GIT_HOME% rev-parse HEAD') do set "GIT_REV=%%A"
+FOR /f "delims=" %%A in ('%GIT_HOME% rev-list HEAD --count') do SET "GIT_REV_COUNT=%%A"
+FOR /f "delims=" %%A in ('%GIT_HOME% rev-parse HEAD') do SET "GIT_REV=%%A"
 
-set VERSION=%SEMANTIC%.%GIT_REV_COUNT%
-echo Version: %VERSION%
-echo # THIS IS A GENERATED FILE  > version.properties
-echo version='%VERSION%' >> version.properties
-echo revision='%GIT_REV%' >> version.properties
-echo Git Revision Number is %GIT_REV_COUNT%
+SET VERSION=%SEMANTIC%.%GIT_REV_COUNT%
+ECHO Version: %VERSION%
+ECHO # THIS IS A GENERATED FILE  > version.properties
+ECHO version='%VERSION%' >> version.properties
+ECHO revision='%GIT_REV%' >> version.properties
+ECHO Git Revision Number is %GIT_REV_COUNT%
 copy version.properties src\VERSION.py
 
-echo ------------------------------------
-echo Creating Package
-echo ------------------------------------
+ECHO ------------------------------------
+ECHO Creating Package
+ECHO ------------------------------------
 
-cd src
+CD src
 python setup.py bdist_msi
 IF NOT "%ERRORLEVEL%" == "0" (
-    echo "FAILED PACKAGING ABORTING"
+    ECHO "FAILED PACKAGING ABORTING"
     EXIT /B 3
 )
-cd ..
+CD ..
 
-echo ------------------------------------
-echo Moving file
-echo ------------------------------------
+ECHO ------------------------------------
+ECHO Moving file
+ECHO ------------------------------------
 
-move src\dist\*.msi .
+MOVE src\dist\*.msi .
