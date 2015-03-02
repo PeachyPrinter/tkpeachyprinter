@@ -110,6 +110,10 @@ IF NOT "%ERRORLEVEL%" == "0" (
     SET fail_reasons="%fail_reasons%\nFAILURE: Getting lastest api failed Check log for details"
 )
 
+echo --------Applying work around to googles protobuf library----
+echo "" >> venv/lib/site-packages/google/__init__.py
+python -m compileall venv/lib/site-packages/google/
+
 IF NOT %will_fail% == 0 (
     ECHO Enviroment Setup failed
     ECHO -e %fail_reasons%

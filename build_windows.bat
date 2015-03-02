@@ -7,7 +7,23 @@ ECHO ------------------------------------
 DEL /Q *.msi
 RMDIR /S /Q src\build
 RMDIR /S /Q src\dist
+RMDIR /S /Q venv
 DEL /S *.pyc
+
+ECHO ------------------------------------
+ECHO Setting up Virtual Enviroment venv
+ECHO ------------------------------------
+
+CALL setup_development_windows.bat
+IF NOT "%ERRORLEVEL%" == "0" (
+    ECHO FAILURE: Environment setup failed, check log
+    EXIT /B 23
+)
+
+
+
+set TCL_LIBRARY=%PYTHON_HOME%\tcl\tcl8.5
+set TK_LIBRARY=%PYTHON_HOME%\tcl
 
 ECHO ------------------------------------
 ECHO Extracting Git Revision Number
