@@ -5,11 +5,13 @@ echo "Cleaning workspace"
 echo "------------------------------------"
 
 # TODO JT 2014-02-13 - Should clean the workspace
+
 rm -rf src/build
 rm -rf *.dmg
 rm -f src/VERSION.py
 rm -f version.properties 
 rm -rf venv
+find . -name "*.pyc" -exec rm -rf {} \;
 
 echo "------------------------------------"
 echo "Setting up Enviroment"

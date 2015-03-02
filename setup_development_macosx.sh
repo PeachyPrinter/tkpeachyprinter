@@ -117,6 +117,10 @@ if [ $WILL_FAIL != 0 ]; then
     exit $WILL_FAIL
 fi
 
+echo "--------Applying work around to googles protobuf library----"
+touch venv/lib/python2.7/site-packages/google/__init__.py
+python -m compileall venv/lib/python2.7/site-packages/google/
+
 echo ""
 echo "-----------------------------------"
 echo "Enviroment setup complete and seemingly successful."
