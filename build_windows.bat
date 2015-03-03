@@ -14,6 +14,11 @@ ECHO ------------------------------------
 ECHO Setting up Virtual Enviroment venv
 ECHO ------------------------------------
 
+IF "%PYTHON_HOME%" == "" (
+    ECHO FAILURE: Environment setup failed, PYTHON_HOME environment variable not available
+    EXIT /B 27
+)
+
 set TCL_LIBRARY=%PYTHON_HOME%\tcl\tcl8.5
 set TK_LIBRARY=%PYTHON_HOME%\tcl
 
