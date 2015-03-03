@@ -93,7 +93,7 @@ if [ $? != 0 ]; then
 fi
 
 if [ $WILL_FAIL != 0 ]; then
-    echo "Enviroment setup failed"
+    echo "Enviroment setup failed. Summary:
     echo -e $FAIL_REASONS
     exit $WILL_FAIL
 fi

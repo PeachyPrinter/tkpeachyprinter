@@ -20,11 +20,6 @@ IF NOT "%ERRORLEVEL%" == "0" (
     EXIT /B 23
 )
 
-
-
-set TCL_LIBRARY=%PYTHON_HOME%\tcl\tcl8.5
-set TK_LIBRARY=%PYTHON_HOME%\tcl
-
 ECHO ------------------------------------
 ECHO Extracting Git Revision Number
 ECHO ------------------------------------
