@@ -14,6 +14,9 @@ ECHO ------------------------------------
 ECHO Setting up Virtual Enviroment venv
 ECHO ------------------------------------
 
+set TCL_LIBRARY=%PYTHON_HOME%\tcl\tcl8.5
+set TK_LIBRARY=%PYTHON_HOME%\tcl
+
 CALL setup_development_windows.bat
 IF NOT "%ERRORLEVEL%" == "0" (
     ECHO FAILURE: Environment setup failed, check log
