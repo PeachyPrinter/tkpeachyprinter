@@ -110,9 +110,23 @@ IF NOT "%ERRORLEVEL%" == "0" (
     SET fail_reasons="%fail_reasons%\nFAILURE: Getting lastest api failed Check log for details"
 )
 
-echo --------Applying work around to googles protobuf library----
-echo "" >> venv/lib/site-packages/google/__init__.py
+ECHO -----------Applying Tcl work around----
+IF "%PYTHON_HOME%"=="" (
+    ECHO PYTHON_HOME environment variable is not defined
+    SET will_fail=58
+    SET fail_reasons="%fail_reasons%\nFAILURE: PYTHON_HOME environment variable is not defined"
+)
+set TCL_LIBRARY=%PYTHON_HOME%\tcl\tcl8.5
+set TK_LIBRARY=%PYTHON_HOME%\tcl
+
+ECHO --------Applying work around to googles protobuf library----
+ECHO "" >> venv/lib/site-packages/google/__init__.py
 python -m compileall venv/lib/site-packages/google/
+IF NOT "%ERRORLEVEL%" == "0" (
+    ECHO FAILURE: Google protobuf workaround failed to apply
+    SET will_fail=76
+    SET fail_reasons="%fail_reasons%\nFAILURE: Google protobuf workaround failed to apply"
+)
 
 IF NOT %will_fail% == 0 (
     ECHO Enviroment Setup failed
