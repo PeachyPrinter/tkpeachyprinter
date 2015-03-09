@@ -120,6 +120,12 @@ set TCL_LIBRARY=%PYTHON_HOME%\tcl\tcl8.5
 set TK_LIBRARY=%PYTHON_HOME%\tcl
 
 ECHO --------Applying work around to googles protobuf library----
+pip install -U --force protobuf==2.6.1
+IF NOT "%ERRORLEVEL%" == "0" (
+    ECHO FAILURE: Google protobuf forced pip install failed
+    SET will_fail=75
+    SET fail_reasons="%fail_reasons%\nFAILURE: Google protobuf forced pip install failed"
+)
 ECHO "" >> venv/lib/site-packages/google/__init__.py
 python -m compileall venv/lib/site-packages/google/
 IF NOT "%ERRORLEVEL%" == "0" (
