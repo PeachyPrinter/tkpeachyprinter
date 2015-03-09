@@ -36,7 +36,7 @@ class CalibrationUI(PeachyFrame, FieldValidations, UIHelpers):
         self._current_printer = self.kwargs['printer']
         self._zero = [0.5,0.5,0.0]
         try:
-            self._calibrationAPI = CalibrationAPI(self._configuration_manager,self._current_printer )
+            self._calibrationAPI = self._api.get_calibration_api()
         except Exception as ex:
             logging.error(ex)
             tkMessageBox.showwarning("Warning", ex)
@@ -45,7 +45,7 @@ class CalibrationUI(PeachyFrame, FieldValidations, UIHelpers):
 
         self._current_selection = StringVar()
         self._current_selection.set('Center Point')
-        
+
         self.grid()
 
         Label(self, text = 'Printer: ').grid(column=1,row=5)
