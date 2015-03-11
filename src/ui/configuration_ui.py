@@ -698,6 +698,10 @@ class CureTestUI(PeachyFrame):
         self._cure_speed.set(self._configuration_api.get_cure_rate_draw_speed())
         self._use_cure_speed = IntVar()
         self._use_cure_speed.set(self._configuration_api.get_cure_rate_use_draw_speed())
+        self._override_laser_power_amount = DoubleVar()
+        self._override_laser_power_amount.set(self._configuration_api.get_override_laser_power_amount())
+        self._override_laser_power = IntVar()
+        self._override_laser_power.set(self._configuration_api.get_override_laser_power())
 
         Label(self, text='Printer: ').grid(column=0, row=10)
         Label(self, text=self._configuration_api.current_printer()).grid(column=1, row=10)
@@ -729,19 +733,22 @@ class CureTestUI(PeachyFrame):
         Button(self._cure_test_frame, text ="Calculate Cure Speed", command=self._calculate).grid(column=2, row=90, sticky=N+S+E)
 
         Label(self).grid(column=1, row=94)
-
         Label(self, text="Maximum Speed (mm/second)").grid(column=0, row=95)
         Entry(self, textvariable=self._cure_speed).grid(column=1, row=95)
-
         Label(self).grid(column=1, row=96)
-        
         Radiobutton(self, text="Override Speed", variable=self._use_cure_speed, value=True,).grid(column=0, row=97, sticky=N+S+E+W)
         Radiobutton(self, text="Use Source Speed ", variable=self._use_cure_speed, value=False,).grid(column=1, row=97, sticky=N+S+E+W)
 
         Label(self).grid(column=1, row=100)
+        Label(self, text="Laser Power Override Value ( 0.0 -> 1.0 )").grid(column=0, row=105)
+        Entry(self, textvariable=self._override_laser_power_amount).grid(column=1, row=105)
+        Label(self).grid(column=1, row=110)
+        Radiobutton(self, state='disabled', text="Override Laser Power", variable=self._override_laser_power, value=True,).grid(column=0, row=120, sticky=N+S+E+W)
+        Radiobutton(self, state='disabled', text="Use Source Laser Power ", variable=self._override_laser_power, value=False,).grid(column=1, row=120, sticky=N+S+E+W)
 
-        Button(self, text ="Save", command=self._save).grid(column=2, row=110, sticky=N+S+E)
-        Button(self, text ="Back", command=self._back).grid(column=0, row=110, sticky=N+S+W)
+        Label(self).grid(column=1, row=200)
+        Button(self, text ="Save", command=self._save).grid(column=2, row=210, sticky=N+S+E)
+        Button(self, text ="Back", command=self._back).grid(column=0, row=210, sticky=N+S+W)
 
         self.update()
 
@@ -768,6 +775,8 @@ class CureTestUI(PeachyFrame):
         try:
             self._configuration_api.set_cure_rate_draw_speed(float(self._cure_speed.get()))
             self._configuration_api.set_cure_rate_use_draw_speed(True if self._use_cure_speed.get() == 1 else False)
+            self._configuration_api.set_override_laser_power(True if self._override_laser_power.get() == 1 else False)
+            self._configuration_api.set_override_laser_power_amount(self._override_laser_power_amount.get())
             self._configuration_api.save()
             self.navigate(SetupUI)
         except Exception as ex:
