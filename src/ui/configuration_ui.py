@@ -545,17 +545,18 @@ class SetupCircutUI(PeachyFrame):
         Label(self, text=self._configuration_api.current_printer()).grid(column=1, row=10)
         Button(self, text='?', command=self._help).grid(column=2, row=10, stick=N+E)
 
-        audio_options = self._configuration_api.get_available_audio_options()
+        # audio_options = self._configuration_api.get_available_audio_options()
+        audio_options = []
         self._digital_frame = LabelFrame(self, text="Digital Circut", padx=5, pady=5)
         self._analog_frame = LabelFrame(self, text="Analog Circut", padx=5, pady=5)
         self._circut_type = StringVar()
 
-        if (len(audio_options['inputs']) > 0 and len(audio_options['outputs']) > 0):
-            self._audio_available = True
-            self.initialize_audio(audio_options)
-            Radiobutton(self, text="Analog Circut", variable=self._circut_type, value="Analog", command=self._circut_type_changed).grid(column=0, row=20, sticky=N+S+E+W)
-        else:
-            self._audio_available = False
+        # if (len(audio_options['inputs']) > 0 and len(audio_options['outputs']) > 0):
+        #     self._audio_available = True
+        #     # self.initialize_audio(audio_options)
+        #     Radiobutton(self, text="Analog Circut", variable=self._circut_type, value="Analog", command=self._circut_type_changed).grid(column=0, row=20, sticky=N+S+E+W)
+        # else:
+        #     self._audio_available = False
 
         self.initialize_micro()
         Radiobutton(self, text="Microcontroller ", variable=self._circut_type, value="Digital", command=self._circut_type_changed).grid(column=1, row=20, sticky=N+S+E+W)
