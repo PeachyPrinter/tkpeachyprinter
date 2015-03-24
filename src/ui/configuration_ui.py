@@ -657,11 +657,11 @@ class SetupCircutUI(PeachyFrame):
         PopUp(self,'Help', help_text.setup_audio_help)
 
     def _save(self):
-        input_option = self._input_options[self._input_audio_selection_current.get()]
-        output_option = self._output_options[self._output_audio_selection_current.get()]
+        # input_option = self._input_options[self._input_audio_selection_current.get()]
+        # output_option = self._output_options[self._output_audio_selection_current.get()]
         
-        self._configuration_api.set_audio_input_options(input_option)
-        self._configuration_api.set_audio_output_options(output_option)
+        # self._configuration_api.set_audio_input_options(input_option)
+        # self._configuration_api.set_audio_output_options(output_option)
         self._configuration_api.set_micro_com_port(self._port.get())
         self._configuration_api.set_micro_com_rate(self._rate.get())
         self._configuration_api.set_micro_com_header(self._header.get())
