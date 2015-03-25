@@ -2,6 +2,7 @@ from Tkinter import *
 import ScrolledText
 import tkMessageBox
 import logging
+logger = logging.getLogger('peachy')
 import sys
 import re
 
@@ -77,7 +78,7 @@ class PopUp():
 
 class PeachyFrame(Frame):
     def __init__(self, parent, api, **kwargs):
-        logging.info("Peachy Frame kwargs: %s" % kwargs)
+        logger.info("Peachy Frame kwargs: %s" % kwargs)
         Frame.__init__(self, parent)
         self.config(padx = 5, pady =5)
         self.parent = parent
@@ -87,7 +88,7 @@ class PeachyFrame(Frame):
         try:
             self.initialize()
         except NO as ex:    #TODO FIX THIS
-            logging.error(ex)
+            logger.error(ex)
             tkMessageBox.showwarning( "Error",ex)
             raise ex
 

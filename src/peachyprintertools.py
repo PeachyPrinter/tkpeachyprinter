@@ -54,7 +54,7 @@ def setup_logging(args):
     if not isinstance(logging_level, int):
         raise ValueError('Invalid log level: %s' % args.loglevel)
     if args.console:
-        rootLogger = logging.getLogger()
+        rootLogger = logging.getLogger('peachy')
         logFormatter = logging.Formatter(logging_format)
         fileHandler = logging.FileHandler(logfile)
         fileHandler.setFormatter(logFormatter)
