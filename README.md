@@ -1,3 +1,8 @@
+-- DEPRICATED -- This is the old version of the peachyprinter ui and is no longer maintained and will not work with the version of the API.
+
+USE AT YOUR OWN RISK
+
+
 # TK Peachy Printer
 TK Peachy Printer is a tkinter frontend for the peachy printer api. 
 
